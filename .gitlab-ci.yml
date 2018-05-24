@@ -35,6 +35,6 @@ heroku-deploy:
   services:
     - docker:dind
   script:
-    - docker build --build-arg JAR_FILE=build/libs/transaction-generator-springboot-0.0.1-SNAPSHOT.jar --tag registry.heroku.com/csv-items-generator/web .
+    - docker build --build-arg JAR_FILE=build/libs/transaction-generator-springboot-0.0.1-SNAPSHOT.jar --tag registry.heroku.com/tran-generator-mk/web .
     - docker login --username=kurczukmarcin@gmail.com --password=$HEROKU_API_KEY registry.heroku.com
-    - docker push registry.heroku.com/csv-items-generator/web
+    - docker push registry.heroku.com/tran-generator-mk/web
