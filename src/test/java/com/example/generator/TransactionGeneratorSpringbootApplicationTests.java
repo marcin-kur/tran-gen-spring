@@ -12,5 +12,4 @@ public class TransactionGeneratorSpringbootApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }

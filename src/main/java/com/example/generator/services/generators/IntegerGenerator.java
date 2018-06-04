@@ -13,7 +13,7 @@ public class IntegerGenerator {
         this.random = new Random();
     }
 
-    public int generate(Range<Integer> integerRange) {
+    int generate(Range<Integer> integerRange) {
         return integerRange.getLowerLimit() + random.nextInt(1 + integerRange.getUpperLimit() - integerRange.getLowerLimit());
     }
 }

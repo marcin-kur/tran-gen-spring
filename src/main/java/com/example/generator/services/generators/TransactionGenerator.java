@@ -4,7 +4,6 @@ import com.example.generator.model.*;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -13,14 +12,18 @@ import java.util.stream.IntStream;
 public class TransactionGenerator {
     private final IntegerGenerator integerGenerator;
     private final TimestampGenerator timestampGenerator;
+    private final ItemsGenerator itemsGenerator;
 
-    public TransactionGenerator(IntegerGenerator integerGenerator, TimestampGenerator timestampGenerator) {
+    public TransactionGenerator(IntegerGenerator integerGenerator, TimestampGenerator timestampGenerator, ItemsGenerator itemsGenerator) {
         this.integerGenerator = integerGenerator;
         this.timestampGenerator = timestampGenerator;
+        this.itemsGenerator = itemsGenerator;
     }
 
-    public List<Transaction> generate(Range<Integer> customerIds, Range<ZonedDateTime> dateRange, Range<Integer> itemsCount, Range<Integer> itemsQuantity, List<Product> products, int eventsCount) {
-        return IntStream.range(1, eventsCount + 1).mapToObj(i -> generateSingleTransaction(i, customerIds, dateRange, itemsCount, itemsQuantity, products)).collect(Collectors.toList());
+    public List<Transaction> generateTransactions(Range<Integer> customerIds, Range<ZonedDateTime> dateRange, Range<Integer> itemsCount, Range<Integer> itemsQuantity, List<Product> products, int eventsCount) {
+        return IntStream.range(1, eventsCount + 1)
+                .mapToObj(i -> generateSingleTransaction(i, customerIds, dateRange, itemsCount, itemsQuantity, products))
+                .collect(Collectors.toList());
     }
 
     private Transaction generateSingleTransaction(int id, Range<Integer> customerIds, Range<ZonedDateTime> dateRange, Range<Integer> itemsCount, Range<Integer> itemQuantity, List<Product> products) {
@@ -28,16 +31,7 @@ public class TransactionGenerator {
                 id,
                 integerGenerator.generate(customerIds),
                 timestampGenerator.generate(dateRange),
-                generateItems(itemsCount, itemQuantity, products)
+                itemsGenerator.generate(itemsCount, itemQuantity, products)
         );
-    }
-
-    private List<Item> generateItems(Range<Integer> itemsCount, Range<Integer> itemQuantity, List<Product> products) {
-        return IntStream.range(0, integerGenerator.generate(itemsCount))
-                .mapToObj(i -> new Item(
-                        products.get(i % products.size()).getName(),
-                        integerGenerator.generate(itemQuantity),
-                        products.get(i % products.size()).getPrice()
-                )).collect(Collectors.toCollection(ArrayList::new));
     }
 }

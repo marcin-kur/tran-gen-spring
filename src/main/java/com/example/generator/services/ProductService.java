@@ -3,8 +3,10 @@ package com.example.generator.services;
 import com.example.generator.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -12,12 +14,19 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
-@Component
+@Service
 public class ProductService {
 
-    private static final String URL = "https://csv-items-generator.herokuapp.com/items";
+    @Value("${url.products}")
+    private String URL;
+    private final RestTemplate restTemplate;
 
-    public List<Product> getProducts() {
+    @Autowired
+    public ProductService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    List<Product> getProducts() {
         log.info("getProducts start...");
         String response = doGet();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -29,8 +38,7 @@ public class ProductService {
         }
     }
 
-    public String doGet() {
-        RestTemplate restTemplate = new RestTemplate();
+    private String doGet() {
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(URL, String.class);
         return responseEntity.getBody();
     }

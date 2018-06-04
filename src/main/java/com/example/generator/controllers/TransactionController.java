@@ -4,9 +4,8 @@ import com.example.generator.model.RequestParameters;
 import com.example.generator.model.Transaction;
 
 import com.example.generator.services.TransactionService;
-import com.example.generator.services.YamlWriter;
+import com.example.generator.services.serializers.YamlSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +20,12 @@ import java.util.Optional;
 public class TransactionController {
 
     private final TransactionService transactionService;
-    private final YamlWriter yamlWriter;
+    private final YamlSerializer yamlSerializer;
 
     @Autowired
-    TransactionController(TransactionService transactionService, YamlWriter yamlWriter) {
+    TransactionController(TransactionService transactionService, YamlSerializer yamlSerializer) {
         this.transactionService = transactionService;
-        this.yamlWriter = yamlWriter;
+        this.yamlSerializer = yamlSerializer;
     }
 
     @RequestMapping(value = "transactions", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
@@ -53,6 +52,6 @@ public class TransactionController {
     ) throws JsonProcessingException {
         RequestParameters requestParameters = new RequestParameters(customerIds, dateRange, itemsCount, itemsQuantity, eventsCount);
         List<Transaction> transactions = transactionService.generateTransactions(requestParameters);
-        return yamlWriter.writeValueAsString(transactions);
+        return yamlSerializer.serialize(transactions);
     }
 }

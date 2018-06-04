@@ -30,7 +30,7 @@ public class TransactionService {
     public List<Transaction> generateTransactions(RequestParameters requestParameters) {
         InputParameters inputParameters = inputParametersCreator.create(requestParameters);
         List<Product> products = productService.getProducts();
-        return transactionGenerator.generate(
+        return transactionGenerator.generateTransactions(
                 inputParameters.getCustomerIds(),
                 inputParameters.getDateRange(),
                 inputParameters.getItemsCount(),
