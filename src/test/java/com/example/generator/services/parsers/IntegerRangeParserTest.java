@@ -1,10 +1,10 @@
 package com.example.generator.services.parsers;
 
-        import com.example.generator.model.Range;
-        import org.junit.Test;
+import com.example.generator.model.Range;
+import org.junit.Test;
 
-        import static org.assertj.core.api.Assertions.assertThat;
-        import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class IntegerRangeParserTest {
 
